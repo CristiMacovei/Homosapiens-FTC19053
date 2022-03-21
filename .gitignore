@@ -1,0 +1,11 @@
+# ignore everything, except directories 
+*
+!*/
+
+# add java clases, except buildconfig
+!**/org/firstinspires/ftc/teamcode/*.java
+**/org/firstinspires/ftc/teamcode/BuildConfig.java
+
+# add gitignore, but not from the idea
+!.gitignore
+.idea/*
