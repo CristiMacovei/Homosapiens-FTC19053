@@ -30,38 +30,17 @@
 package org.firstinspires.ftc.teamcode;
 
 
-import android.graphics.Bitmap;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import android.graphics.Color;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import java.util.List;
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import com.vuforia.Image;
 import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+
 public abstract class GeneralAuto extends LinearOpMode {
-    private ElapsedTime     runtime = new ElapsedTime();
-    private DcMotor frontLeftMotor = null;
-    private DcMotor backLeftMotor = null;
-    private DcMotor frontRightMotor = null;
-    private DcMotor backRightMotor = null;
-    private DcMotor carouselMotor = null;
-
-    private Servo servo1 = null;
-    private Servo servo2 = null;
-
-    private DcMotor armMotor1 = null;
-
     private double mPower = 0.4;
     private static final String VUFORIA_KEY =
             "AdHwNjn/////AAABmdhNlo7iF0zIjJ96OYWNdeMgLYqjp7kNnO8YW2SwcYwHZjXaAWLBtLHGgiEQUohwzbPQO55eiXFPIXqwa9fI5RKXbxqcL5FJvGoLs4EEZaebutnORhRkqhRk/KKBsG6nC0VNrsXu9DaqQmpEc3FENATOg/K2I4Z3IhA69AqJHXhkIQovnl6kcT9l6y6MSOwRJ6PZrPbuII0GOZgTJgvaAmXwvQqt0moa7fz8yABRPTd0hhZL7ax2lrRJpVtYv4SM8KHCVZMUG4bQfdR4C8cFFdWCRZ6tmCxqIPo02oLvO6l2MroieHtLUrAlBmuULotpaweWyu5am/mRYeTG9h1+KwlHWsyrzpzx86+vX3dORPzq";
@@ -69,210 +48,215 @@ public abstract class GeneralAuto extends LinearOpMode {
     private VuforiaLocalizer vuforia;
 
     public void moveYAxis (int position, double power) {
-        frontLeftMotor.setTargetPosition(position);
-        frontRightMotor.setTargetPosition(position);
-        backLeftMotor.setTargetPosition(position);
-        backRightMotor.setTargetPosition(position);
+        RobotConfig.Motors.frontLeft.setTargetPosition(position);
+        RobotConfig.Motors.frontRight.setTargetPosition(position);
+        RobotConfig.Motors.backLeft.setTargetPosition(position);
+        RobotConfig.Motors.backRight.setTargetPosition(position);
 
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RobotConfig.Motors.frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RobotConfig.Motors.frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RobotConfig.Motors.backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RobotConfig.Motors.backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontLeftMotor.setPower(power);
-        frontRightMotor.setPower(power);
-        backLeftMotor.setPower(power);
-        backRightMotor.setPower(power);
+        RobotConfig.Motors.frontLeft.setPower(power);
+        RobotConfig.Motors.frontRight.setPower(power);
+        RobotConfig.Motors.backLeft.setPower(power);
+        RobotConfig.Motors.backRight.setPower(power);
 
-        while (frontLeftMotor.isBusy()) {
+        while (
+                RobotConfig.Motors.frontLeft.isBusy() ||
+                RobotConfig.Motors.frontRight.isBusy() ||
+                RobotConfig.Motors.backLeft.isBusy() ||
+                RobotConfig.Motors.backRight.isBusy()
+        );
 
-        }
+        RobotConfig.Motors.frontLeft.setPower(0);
+        RobotConfig.Motors.frontRight.setPower(0);
+        RobotConfig.Motors.backLeft.setPower(0);
+        RobotConfig.Motors.backRight.setPower(0);
 
-        frontLeftMotor.setPower(0);
-        frontRightMotor.setPower(0);
-        backLeftMotor.setPower(0);
-        backRightMotor.setPower(0);
+        RobotConfig.Motors.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RobotConfig.Motors.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RobotConfig.Motors.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RobotConfig.Motors.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
 
-        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    public void moveYAxis (int position) {
+        moveYAxis(position, mPower);
     }
 
     public void moveXAxis (int position, double power) {
-        frontLeftMotor.setTargetPosition(position);
-        frontRightMotor.setTargetPosition(-position);
-        backLeftMotor.setTargetPosition(-position);
-        backRightMotor.setTargetPosition(position);
+        RobotConfig.Motors.frontLeft.setTargetPosition(position);
+        RobotConfig.Motors.frontRight.setTargetPosition(-position);
+        RobotConfig.Motors.backLeft.setTargetPosition(-position);
+        RobotConfig.Motors.backRight.setTargetPosition(position);
 
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RobotConfig.Motors.frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RobotConfig.Motors.frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RobotConfig.Motors.backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RobotConfig.Motors.backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontLeftMotor.setPower(power);
-        frontRightMotor.setPower(power);
-        backLeftMotor.setPower(power);
-        backRightMotor.setPower(power);
+        RobotConfig.Motors.frontLeft.setPower(power);
+        RobotConfig.Motors.frontRight.setPower(power);
+        RobotConfig.Motors.backLeft.setPower(power);
+        RobotConfig.Motors.backRight.setPower(power);
 
-        while (frontLeftMotor.isBusy()) {
+        while (
+                RobotConfig.Motors.frontLeft.isBusy() ||
+                RobotConfig.Motors.frontRight.isBusy() ||
+                RobotConfig.Motors.backLeft.isBusy() ||
+                RobotConfig.Motors.backRight.isBusy()
+        );
 
-        }
+        RobotConfig.Motors.frontLeft.setPower(0);
+        RobotConfig.Motors.frontRight.setPower(0);
+        RobotConfig.Motors.backLeft.setPower(0);
+        RobotConfig.Motors.backRight.setPower(0);
 
-        frontLeftMotor.setPower(0);
-        frontRightMotor.setPower(0);
-        backLeftMotor.setPower(0);
-        backRightMotor.setPower(0);
-
-        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RobotConfig.Motors.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RobotConfig.Motors.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RobotConfig.Motors.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RobotConfig.Motors.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
+
+    public void moveXAxis (int position) {
+        moveXAxis(position, mPower);
+    }
+
+    // todo redo this
     public void rotate (int position, double power) {
-        frontLeftMotor.setTargetPosition(position);
-        frontRightMotor.setTargetPosition(-position);
-        backLeftMotor.setTargetPosition(position);
-        backRightMotor.setTargetPosition(-position);
+        RobotConfig.Motors.frontLeft.setTargetPosition(position);
+        RobotConfig.Motors.frontRight.setTargetPosition(-position);
+        RobotConfig.Motors.backLeft.setTargetPosition(position);
+        RobotConfig.Motors.backRight.setTargetPosition(-position);
 
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RobotConfig.Motors.frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RobotConfig.Motors.frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RobotConfig.Motors.backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RobotConfig.Motors.backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontLeftMotor.setPower(power);
-        frontRightMotor.setPower(power);
-        backLeftMotor.setPower(power);
-        backRightMotor.setPower(power);
+        RobotConfig.Motors.frontLeft.setPower(power);
+        RobotConfig.Motors.frontRight.setPower(power);
+        RobotConfig.Motors.backLeft.setPower(power);
+        RobotConfig.Motors.backRight.setPower(power);
 
-        while (frontLeftMotor.isBusy()) {
+        while (
+                RobotConfig.Motors.frontLeft.isBusy() ||
+                RobotConfig.Motors.frontRight.isBusy() ||
+                RobotConfig.Motors.backLeft.isBusy() ||
+                RobotConfig.Motors.backRight.isBusy()
+        );
 
-        }
+        RobotConfig.Motors.frontLeft.setPower(0);
+        RobotConfig.Motors.frontRight.setPower(0);
+        RobotConfig.Motors.backLeft.setPower(0);
+        RobotConfig.Motors.backRight.setPower(0);
 
-        frontLeftMotor.setPower(0);
-        frontRightMotor.setPower(0);
-        backLeftMotor.setPower(0);
-        backRightMotor.setPower(0);
+        RobotConfig.Motors.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RobotConfig.Motors.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RobotConfig.Motors.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RobotConfig.Motors.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
 
-        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    public void rotate (int position) {
+        rotate(position, mPower);
     }
 
     public void armAuto (int level) {
         if (level == 1) {
-            armMotor1.setTargetPosition(135);
-            armMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            armMotor1.setPower(.3);
+            RobotConfig.Motors.arm.setTargetPosition(135);
+            RobotConfig.Motors.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            RobotConfig.Motors.arm.setPower(.3);
         }
         if (level == 2) {
-            armMotor1.setTargetPosition(275);
-            armMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            armMotor1.setPower(.3);
+            RobotConfig.Motors.arm.setTargetPosition(275);
+            RobotConfig.Motors.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            RobotConfig.Motors.arm.setPower(.3);
         }
         if (level == 3) {
-            armMotor1.setTargetPosition(380);
-            armMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            armMotor1.setPower(.3);
+            RobotConfig.Motors.arm.setTargetPosition(380);
+            RobotConfig.Motors.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            RobotConfig.Motors.arm.setPower(.3);
         }
 
-        while(armMotor1.isBusy()) {
-
-        }
+        while(RobotConfig.Motors.arm.isBusy());
 
         if (level == 3) {
             moveYAxis(175, mPower);
         }
 
 
-        servo2.setPosition(.7);
-        servo1.setPosition(.7);
+        RobotConfig.Servos.sweeper2.setPosition(.7);
+        RobotConfig.Servos.sweeper1.setPosition(.7);
 
         sleep(2500);
 
-        servo2.setPosition(0.5);
-        servo1.setPosition(0.5);
+        RobotConfig.Servos.sweeper2.setPosition(0.5);
+        RobotConfig.Servos.sweeper1.setPosition(0.5);
         if (level == 3) {
             moveYAxis(-175, mPower);
         }
         moveYAxis(-200, 0.3);
-        armMotor1.setTargetPosition(0);
-        armMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armMotor1.setPower(.3);
-        while(armMotor1.isBusy());
-        armMotor1.setPower(0);
-        armMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        RobotConfig.Motors.arm.setTargetPosition(0);
+        RobotConfig.Motors.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RobotConfig.Motors.arm.setPower(.3);
+        while(RobotConfig.Motors.arm.isBusy());
+        RobotConfig.Motors.arm.setPower(0);
+        RobotConfig.Motors.arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
 
     @Override
     public void runOpMode() {
-        frontLeftMotor = hardwareMap.get(DcMotor.class, "m_frontleft");
-        frontRightMotor = hardwareMap.get(DcMotor.class, "m_frontright");
-        backLeftMotor = hardwareMap.get(DcMotor.class, "m_backleft");
-        backRightMotor = hardwareMap.get(DcMotor.class, "m_backright");
-        carouselMotor = hardwareMap.get(DcMotor.class, "m_carusel");
-        servo1 = hardwareMap.get(Servo.class, "servo1");
-        servo2 = hardwareMap.get(Servo.class, "servo2");
-        armMotor1 = hardwareMap.get(DcMotor.class, "m_arm1");
+        RobotConfig.init(hardwareMap);
 
+        RobotConfig.Motors.frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        RobotConfig.Motors.frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        RobotConfig.Motors.backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        RobotConfig.Motors.backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        RobotConfig.Motors.carousel.setDirection(DcMotor.Direction.REVERSE);
 
-        carouselMotor.setDirection(DcMotor.Direction.REVERSE);
+        RobotConfig.Motors.frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        RobotConfig.Motors.backLeft.setDirection(DcMotor.Direction.REVERSE);
 
+        RobotConfig.Motors.frontRight.setDirection(DcMotor.Direction.FORWARD);
+        RobotConfig.Motors.backRight.setDirection(DcMotor.Direction.FORWARD);
 
-        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        RobotConfig.Servos.sweeper1.setDirection(Servo.Direction.REVERSE);
+        RobotConfig.Servos.sweeper2.setDirection(Servo.Direction.FORWARD);
 
-        frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
-        backRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        RobotConfig.Motors.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        RobotConfig.Motors.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        RobotConfig.Motors.backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        RobotConfig.Motors.backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        servo1.setDirection(Servo.Direction.REVERSE);
-        servo2.setDirection(Servo.Direction.FORWARD);
+        RobotConfig.Motors.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RobotConfig.Motors.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        armMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        armMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        RobotConfig.Motors.arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         initVuforia();
 
-        /** Wait for the game to begin */
         telemetry.addData(">", "Press start when ready.");
         telemetry.update();
         waitForStart();
 
         int level = recognition();
 
-        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RobotConfig.Motors.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RobotConfig.Motors.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RobotConfig.Motors.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RobotConfig.Motors.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         movement(level);
     }
 
-    /**
-     * Initialize the Vuforia localization engine.
-     */
     private void initVuforia() {
-        /*
-         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
-         */
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
-        //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
         vuforia.setFrameQueueCapacity(1);
