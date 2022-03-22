@@ -41,11 +41,11 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
 public abstract class GeneralAuto extends LinearOpMode {
-    private double mPower = 0.4;
+    public double mPower = 0.4;
     private static final String VUFORIA_KEY =
             "AdHwNjn/////AAABmdhNlo7iF0zIjJ96OYWNdeMgLYqjp7kNnO8YW2SwcYwHZjXaAWLBtLHGgiEQUohwzbPQO55eiXFPIXqwa9fI5RKXbxqcL5FJvGoLs4EEZaebutnORhRkqhRk/KKBsG6nC0VNrsXu9DaqQmpEc3FENATOg/K2I4Z3IhA69AqJHXhkIQovnl6kcT9l6y6MSOwRJ6PZrPbuII0GOZgTJgvaAmXwvQqt0moa7fz8yABRPTd0hhZL7ax2lrRJpVtYv4SM8KHCVZMUG4bQfdR4C8cFFdWCRZ6tmCxqIPo02oLvO6l2MroieHtLUrAlBmuULotpaweWyu5am/mRYeTG9h1+KwlHWsyrzpzx86+vX3dORPzq";
 
-    private VuforiaLocalizer vuforia;
+    public VuforiaLocalizer vuforia;
 
     public void moveYAxis (int position, double power) {
         RobotConfig.Motors.frontLeft.setTargetPosition(position);
@@ -65,9 +65,9 @@ public abstract class GeneralAuto extends LinearOpMode {
 
         while (
                 RobotConfig.Motors.frontLeft.isBusy() ||
-                RobotConfig.Motors.frontRight.isBusy() ||
-                RobotConfig.Motors.backLeft.isBusy() ||
-                RobotConfig.Motors.backRight.isBusy()
+                        RobotConfig.Motors.frontRight.isBusy() ||
+                        RobotConfig.Motors.backLeft.isBusy() ||
+                        RobotConfig.Motors.backRight.isBusy()
         );
 
         RobotConfig.Motors.frontLeft.setPower(0);
@@ -103,9 +103,9 @@ public abstract class GeneralAuto extends LinearOpMode {
 
         while (
                 RobotConfig.Motors.frontLeft.isBusy() ||
-                RobotConfig.Motors.frontRight.isBusy() ||
-                RobotConfig.Motors.backLeft.isBusy() ||
-                RobotConfig.Motors.backRight.isBusy()
+                        RobotConfig.Motors.frontRight.isBusy() ||
+                        RobotConfig.Motors.backLeft.isBusy() ||
+                        RobotConfig.Motors.backRight.isBusy()
         );
 
         RobotConfig.Motors.frontLeft.setPower(0);
@@ -142,9 +142,9 @@ public abstract class GeneralAuto extends LinearOpMode {
 
         while (
                 RobotConfig.Motors.frontLeft.isBusy() ||
-                RobotConfig.Motors.frontRight.isBusy() ||
-                RobotConfig.Motors.backLeft.isBusy() ||
-                RobotConfig.Motors.backRight.isBusy()
+                        RobotConfig.Motors.frontRight.isBusy() ||
+                        RobotConfig.Motors.backLeft.isBusy() ||
+                        RobotConfig.Motors.backRight.isBusy()
         );
 
         RobotConfig.Motors.frontLeft.setPower(0);
@@ -182,19 +182,19 @@ public abstract class GeneralAuto extends LinearOpMode {
         while(RobotConfig.Motors.arm.isBusy());
 
         if (level == 3) {
-            moveYAxis(175, mPower);
+            moveYAxis(75, mPower);
         }
 
 
-        RobotConfig.Servos.sweeper2.setPosition(.7);
-        RobotConfig.Servos.sweeper1.setPosition(.7);
+        RobotConfig.Servos.brush2.setPosition(.7);
+        RobotConfig.Servos.brush1.setPosition(.7);
 
         sleep(2500);
 
-        RobotConfig.Servos.sweeper2.setPosition(0.5);
-        RobotConfig.Servos.sweeper1.setPosition(0.5);
+        RobotConfig.Servos.brush2.setPosition(0.5);
+        RobotConfig.Servos.brush1.setPosition(0.5);
         if (level == 3) {
-            moveYAxis(-175, mPower);
+            moveYAxis(-75, mPower);
         }
         moveYAxis(-200, 0.3);
         RobotConfig.Motors.arm.setTargetPosition(0);
@@ -223,8 +223,8 @@ public abstract class GeneralAuto extends LinearOpMode {
         RobotConfig.Motors.frontRight.setDirection(DcMotor.Direction.FORWARD);
         RobotConfig.Motors.backRight.setDirection(DcMotor.Direction.FORWARD);
 
-        RobotConfig.Servos.sweeper1.setDirection(Servo.Direction.REVERSE);
-        RobotConfig.Servos.sweeper2.setDirection(Servo.Direction.FORWARD);
+        RobotConfig.Servos.brush1.setDirection(Servo.Direction.REVERSE);
+        RobotConfig.Servos.brush2.setDirection(Servo.Direction.FORWARD);
 
         RobotConfig.Motors.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RobotConfig.Motors.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
